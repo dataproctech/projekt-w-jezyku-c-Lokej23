@@ -1,0 +1,18 @@
+#ifndef PADDLE_H
+#define PADDLE_H
+
+#include <SDL2/SDL.h>
+#include <stdbool.h>
+
+typedef struct
+{
+    SDL_Rect rect;
+    SDL_Scancode keyUp;
+    SDL_Scancode keyDown;
+    float speed;
+} Paddle;
+
+bool paddleInit(Paddle *p, int is_player);
+void paddleUpdate(Paddle *p, const Uint8 *keystate, float dt);
+
+#endif // PADDLE_H
