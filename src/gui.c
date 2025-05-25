@@ -1,12 +1,6 @@
 #include "../include/gui.h"
 #include <SDL2/SDL.h>
 
-Gui gui =
-    {
-        .window = NULL,
-        .renderer = NULL,
-};
-
 bool guiInit(Gui *gui)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING))

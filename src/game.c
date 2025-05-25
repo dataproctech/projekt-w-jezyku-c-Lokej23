@@ -30,3 +30,17 @@ bool gameInit(Game *g, int max_score)
 
     return false;
 }
+
+void gameUpdate(Game *g, const Uint8 *keystate, float dt)
+{
+    if (g->game_over)
+        return;
+
+    paddleUpdate(&g->paddle_1, keystate, dt);
+    paddleUpdate(&g->paddle_2, keystate, dt);
+    ballUpdate(&g->ball, dt);
+    if (ballCheckCollision(&g->ball, &g->paddle_1) || ballCheckCollision(&g->ball, &g->paddle_2))
+    {
+        printf("Ping ");
+    }
+}

@@ -1,4 +1,5 @@
 #include "paddle.h"
+#include "gui.h"
 
 bool paddleInit(Paddle *p, bool is_player)
 {
@@ -21,4 +22,24 @@ bool paddleInit(Paddle *p, bool is_player)
     p->is_player = is_player;
 
     return false;
+}
+
+void paddleUpdate(Paddle *p, const Uint8 *keystate, float dt)
+{
+    // rucha paletki
+    if (keystate[p->keyUp])
+    {
+        p->rect.y -= p->speed * dt;
+
+        // ograniczenie aby nie wypadła poza ekran
+        if (p->rect.y < 0)
+            p->rect.y = 0;
+    }
+    if (keystate[p->keyDown])
+    {
+        p->rect.y += p->speed * dt;
+
+        if (p->rect.y > SCREEN_HEIGHT - p->rect.h)
+            p->rect.y = SCREEN_HEIGHT - p->rect.h;
+    }
 }

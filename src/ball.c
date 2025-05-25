@@ -1,4 +1,5 @@
 #include "ball.h"
+#include "game.h"
 #include <time.h>
 
 bool ballInit(Ball *b)
@@ -11,7 +12,7 @@ bool ballInit(Ball *b)
     b->rect.w = 10; // szerokość i wysokośc piłki
     b->rect.h = 10;
     b->rect.x = 395.0f; // pozycja na ekranie
-    b->rect.y = 295.0f; 
+    b->rect.y = 295.0f;
 
     b->speed = 350.0f;
 
@@ -22,6 +23,38 @@ bool ballInit(Ball *b)
     b->vy = diry * (b->speed / 2.0f); // aby było ukośnie
 
     b->color = (SDL_Color){255, 255, 255, 255};
+
+    return false;
+}
+
+void ballUpdate(Ball *b, float dt)
+{
+    b->rect.x += b->vx * dt;
+    b->rect.y += b->vy * dt;
+
+    if (b->rect.y <= 0 || b->rect.y >= SCREEN_HEIGHT - b->rect.h)
+        b->vy = -b->vy;
+}
+
+bool ballCheckCollision(Ball *b, Paddle *p)
+{
+    if (b == NULL || p == NULL)
+        return false;
+
+    if (b->rect.x < p->rect.x + p->rect.w &&
+        b->rect.x + b->rect.w > p->rect.x &&
+        b->rect.y < p->rect.y + p->rect.h &&
+        b->rect.y + b->rect.h > p->rect.y)
+    {
+        b->vx = -b->vx;
+
+        // zwiększenie prędkości
+        b->speed *= 1.05f;
+        if (b->speed > 700.0f)
+            b->speed = 700.0f; // maksymalna prędkość
+
+        return true;
+    }
 
     return false;
 }
