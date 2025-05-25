@@ -7,7 +7,9 @@
 typedef struct 
 {
     SDL_Rect rect;
-    float vel;
+    float speed;
+    float vx, vy;
+    SDL_Color color;
 } Ball; 
 
 bool ballInit(Ball *b);

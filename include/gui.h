@@ -20,4 +20,6 @@ extern Gui gui;
 bool guiInit(Gui *gui);
 void guiClean(Gui *gui, int exit_status);
 
+bool guiDrawRect(Gui *gui, const SDL_Rect *rect, SDL_Color color);
+
 #endif // GUI_H

@@ -14,7 +14,7 @@ typedef struct
     int score_1;
     int score_2;
     int max_score;
-    int game_over;
+    bool game_over;
 } Game;
 
 bool gameInit(Game *g, int max_score);
