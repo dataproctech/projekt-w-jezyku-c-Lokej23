@@ -17,11 +17,17 @@ bool ballInit(Ball *b)
 
     b->speed = 350.0f;
 
+    // oczekiwanie
+    b->is_waiting = true;
+    b->waiting_timer = 0.5f;
+    b->vx = 0; // prędkość w czasie czekania
+    b->vy = 0;
+
     srand((unsigned)time(NULL));
     int dirx = rand() % 2 ? 1 : -1;
     int diry = rand() % 2 ? 1 : -1;
-    b->vx = dirx * b->speed;
-    b->vy = diry * (b->speed / 2.0f); // aby było ukośnie
+    b->next_vx = dirx * b->speed;
+    b->next_vy = diry * (b->speed / 2.0f); // aby było ukośnie
 
     b->color = (SDL_Color){255, 255, 255, 255};
 
@@ -30,6 +36,18 @@ bool ballInit(Ball *b)
 
 void ballUpdate(Ball *b, float dt)
 {
+    if (b->is_waiting)
+    {
+        b->waiting_timer -= dt;
+        if (b->waiting_timer <= 0)
+        {
+            // wystrzelenie piłki
+            b->is_waiting = false;
+            b->vx = b->next_vx;
+            b->vy = b->next_vy;
+        }
+        return; // brak aktualizacji pozycji podczas czekania
+    }
     b->rect.x += b->vx * dt;
     b->rect.y += b->vy * dt;
 
