@@ -1,4 +1,5 @@
-#include "../include/game.h"
+#include "game.h"
+#include "main.h"
 
 bool gameInit(Game *g, int max_score)
 {
@@ -41,6 +42,31 @@ void gameUpdate(Game *g, const Uint8 *keystate, float dt)
     ballUpdate(&g->ball, dt);
     if (ballCheckCollision(&g->ball, &g->paddle_1) || ballCheckCollision(&g->ball, &g->paddle_2))
     {
-        printf("Ping ");
+        printf("Ping\n");
     }
+
+    gameCheckCollision(g);
+}
+
+void gameCheckCollision(Game *g)
+{
+    if (g->ball.rect.x <= 0)
+    {
+        g->score_2++;
+        gameRoundReset(g);
+        printf("Punkt dla gracza 2 %d\n", g->score_2);
+    }
+    else if (g->ball.rect.x >= SCREEN_WIDTH - g->ball.rect.w)
+    {
+        g->score_1++;
+        gameRoundReset(g);
+        printf("Punkt dla gracza 1 %d\n", g->score_1);
+    }
+}
+
+void gameRoundReset(Game *g)
+{
+    paddleInit(&g->paddle_1, true);
+    paddleInit(&g->paddle_2, false);
+    ballInit(&g->ball);
 }

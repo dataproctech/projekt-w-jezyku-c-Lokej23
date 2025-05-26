@@ -26,7 +26,7 @@ bool paddleInit(Paddle *p, bool is_player)
 
 void paddleUpdate(Paddle *p, const Uint8 *keystate, float dt)
 {
-    // rucha paletki
+    // ruch paletki
     if (keystate[p->keyUp])
     {
         p->rect.y -= p->speed * dt;

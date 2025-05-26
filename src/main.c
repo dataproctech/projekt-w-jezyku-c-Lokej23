@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
                 guiClean(&gui, EXIT_SUCCESS);
                 game_loop = false;
                 break;
-
             default:
                 break;
             }

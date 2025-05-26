@@ -1,5 +1,6 @@
 #include "ball.h"
 #include "game.h"
+#include "main.h"
 #include <time.h>
 
 bool ballInit(Ball *b)
@@ -46,7 +47,14 @@ bool ballCheckCollision(Ball *b, Paddle *p)
         b->rect.y < p->rect.y + p->rect.h &&
         b->rect.y + b->rect.h > p->rect.y)
     {
+        float og_direction = b->vx;
         b->vx = -b->vx;
+
+        // odbijanie od paletki
+        if (og_direction > 0)
+            b->rect.x = p->rect.x - b->rect.w;
+        else
+            b->rect.x = p->rect.x + p->rect.w;
 
         // zwiększenie prędkości
         b->speed *= 1.05f;
