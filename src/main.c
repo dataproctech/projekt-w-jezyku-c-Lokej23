@@ -29,8 +29,6 @@ int main(int argc, char *argv[])
         if (delta_time > 0.05)
             delta_time = 0.05;
 
-        printf("%lf\n", delta_time * 60);
-
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -50,6 +48,7 @@ int main(int argc, char *argv[])
 
         SDL_SetRenderDrawColor(gui.renderer, 0, 0, 0, 255);
         SDL_RenderClear(gui.renderer);
+        guiDrawCenterLine(&gui);
 
         guiDrawRect(&gui, &game.paddle_1.rect, game.paddle_1.color);
         guiDrawRect(&gui, &game.paddle_2.rect, game.paddle_2.color);

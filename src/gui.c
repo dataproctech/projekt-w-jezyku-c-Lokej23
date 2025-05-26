@@ -36,6 +36,29 @@ void guiClean(Gui *gui, int exit_status)
     exit(exit_status);
 }
 
+bool guiDrawCenterLine(Gui *gui)
+{
+    if (SDL_SetRenderDrawColor(gui->renderer, 110, 110, 110, 255))
+    {
+        fprintf(stderr, "Error initializing middle line: %s\n", SDL_GetError());
+        return true;
+    }
+
+    SDL_Rect line;
+    line.w = 10;
+    line.h = SCREEN_HEIGHT;
+    line.x = 395.0f;
+    line.y = 0;
+
+    if (SDL_RenderFillRect(gui->renderer, &line))
+    {
+        fprintf(stderr, "Error filling middle line: %s\n", SDL_GetError());
+        return true;
+    }
+
+    return false;
+}
+
 bool guiDrawRect(Gui *gui, const SDL_Rect *rect, SDL_Color color)
 {
     if (SDL_SetRenderDrawColor(gui->renderer, color.r, color.g, color.b, color.a))
