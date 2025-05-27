@@ -1,5 +1,6 @@
 #include "../include/gui.h"
 #include <SDL2/SDL.h>
+// #include <SDL2/SDL_ttf.h>
 
 bool guiInit(Gui *gui)
 {
@@ -44,20 +45,28 @@ bool guiDrawCenterLine(Gui *gui)
         return true;
     }
 
-    SDL_Rect line;
-    line.w = 10;
-    line.h = SCREEN_HEIGHT;
-    line.x = 395.0f;
-    line.y = 0;
-
-    if (SDL_RenderFillRect(gui->renderer, &line))
+    for (int y = 0; y < SCREEN_HEIGHT; y += 20)
     {
-        fprintf(stderr, "Error filling middle line: %s\n", SDL_GetError());
-        return true;
+        SDL_Rect line;
+        line.w = 2;
+        line.h = 10;
+        line.x = 395.0f;
+        line.y = y;
+
+        if (SDL_RenderFillRect(gui->renderer, &line))
+        {
+            fprintf(stderr, "Error filling middle line: %s\n", SDL_GetError());
+            return true;
+        }
     }
 
     return false;
 }
+
+// bool guiDrawScore(Gui *gui, int score_1, int score_2)
+// {
+//     if (TTF_OpenFont())
+// }
 
 bool guiDrawRect(Gui *gui, const SDL_Rect *rect, SDL_Color color)
 {

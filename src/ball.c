@@ -75,9 +75,9 @@ bool ballCheckCollision(Ball *b, Paddle *p)
             b->rect.x = p->rect.x + p->rect.w;
 
         // zwiększenie prędkości
-        b->speed *= 1.05f;
-        if (b->speed > 700.0f)
-            b->speed = 700.0f; // maksymalna prędkość
+        b->speed *= 1.15f;
+        if (b->speed > 1000.0f)
+            b->speed = 1000.0f; // maksymalna prędkość
 
         return true;
     }

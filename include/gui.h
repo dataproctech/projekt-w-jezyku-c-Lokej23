@@ -20,6 +20,7 @@ extern Gui gui;
 bool guiInit(Gui *gui);
 void guiClean(Gui *gui, int exit_status);
 bool guiDrawCenterLine(Gui *gui);
+bool guiDrawScore(Gui *gui, int score_1, int score_2);
 
 bool guiDrawRect(Gui *gui, const SDL_Rect *rect, SDL_Color color);
 
