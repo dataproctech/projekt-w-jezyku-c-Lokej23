@@ -1,6 +1,6 @@
 #include "../include/gui.h"
 #include <SDL2/SDL.h>
-// #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 bool guiInit(Gui *gui)
 {
