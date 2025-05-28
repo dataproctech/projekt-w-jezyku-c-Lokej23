@@ -49,6 +49,9 @@ int main(int argc, char *argv[])
         SDL_SetRenderDrawColor(gui.renderer, 0, 0, 0, 255);
         SDL_RenderClear(gui.renderer);
         guiDrawCenterLine(&gui);
+        
+        if ((game.score_1 != gui.score.last_score_1 || game.score_2 != gui.score.last_score_2))
+            guiDrawScore(&gui, game.score_1, game.score_2);
 
         guiDrawRect(&gui, &game.paddle_1.rect, game.paddle_1.color);
         guiDrawRect(&gui, &game.paddle_2.rect, game.paddle_2.color);
