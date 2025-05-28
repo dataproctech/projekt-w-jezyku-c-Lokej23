@@ -1,7 +1,7 @@
 #include "paddle.h"
 #include "gui.h"
 
-bool paddleInit(Paddle *p, bool is_player)
+bool paddleInit(Paddle *p, bool is_left)
 {
     if (p == NULL)
     {
@@ -10,16 +10,16 @@ bool paddleInit(Paddle *p, bool is_player)
     }
     p->rect.w = 10;
     p->rect.h = 100;
-    p->rect.x = is_player ? 20.0f : 770.0f;
+    p->rect.x = is_left ? 20.0f : 770.0f;
     p->rect.y = 250.0f;
 
-    p->keyUp = is_player ? SDL_SCANCODE_W : SDL_SCANCODE_UP;
-    p->keyDown = is_player ? SDL_SCANCODE_S : SDL_SCANCODE_DOWN;
+    p->keyUp = is_left ? SDL_SCANCODE_W : SDL_SCANCODE_UP;
+    p->keyDown = is_left ? SDL_SCANCODE_S : SDL_SCANCODE_DOWN;
 
     p->speed = 300.0f;
-    p->color = is_player ? (SDL_Color){255, 0, 0, 255} : (SDL_Color){0, 255, 0, 255};
+    p->color = is_left ? (SDL_Color){255, 0, 0, 255} : (SDL_Color){0, 255, 0, 255};
 
-    p->is_player = is_player;
+    p->is_left = is_left;
 
     return false;
 }

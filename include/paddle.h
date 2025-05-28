@@ -11,10 +11,10 @@ typedef struct
     SDL_Scancode keyDown;
     float speed;
     SDL_Color color;
-    bool is_player;
+    bool is_left;
 } Paddle;
 
-bool paddleInit(Paddle *p, bool is_player);
+bool paddleInit(Paddle *p, bool is_left);
 void paddleUpdate(Paddle *p, const Uint8 *keystate, float dt);
 
 #endif // PADDLE_H
