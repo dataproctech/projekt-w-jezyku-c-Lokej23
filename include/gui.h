@@ -9,11 +9,10 @@
 #define WINDOW_TITLE "PONG"
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-#define TEXT_SIZE 24
+#define SCORE_SIZE 24
 
 typedef struct
 {
-    TTF_Font *font;
     SDL_Color color;
     SDL_Rect rect;
     SDL_Texture *texture;
@@ -26,6 +25,7 @@ typedef struct
     SDL_Window *window;
     SDL_Renderer *renderer;
 
+    TTF_Font *font;
     Score score;
 } Gui;
 extern Gui gui;
