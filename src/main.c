@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
 
     if (guiInit(&gui))
         guiClean(&gui, EXIT_FAILURE);
+    if (menuInit(&gui, &menu))
+        menuClean(&menu);
     if (gameInit(&game, 10))
         guiClean(&gui, EXIT_FAILURE);
 
@@ -48,6 +50,12 @@ int main(int argc, char *argv[])
                 if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN)
                     game_state = STATE_PLAYING;
             }
+
+            if (game_state == STATE_PLAYING)
+            {
+                if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+                    game_state = STATE_MENU;
+            }
         }
 
         const Uint8 *keystate = SDL_GetKeyboardState(NULL);
@@ -56,7 +64,7 @@ int main(int argc, char *argv[])
         SDL_RenderClear(gui.renderer);
         if (game_state == STATE_MENU)
         {
-            renderMenu(&gui, &menu);
+            menuRender(&gui, &menu);
         }
         else
         {

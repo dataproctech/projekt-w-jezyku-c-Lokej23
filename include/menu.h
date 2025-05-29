@@ -26,7 +26,9 @@ typedef struct {
     int final_score;
 } Menu;
 
-bool renderMenu(Gui *gui, Menu *menu);
+bool menuInit(Gui *gui, Menu *menu);
+void menuClean(Menu *menu);
+bool menuRender(Gui *gui, Menu *menu);
 
 
 #endif // MENU_H
