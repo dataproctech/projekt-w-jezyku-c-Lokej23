@@ -21,5 +21,6 @@ bool gameInit(Game *g, int max_score);
 void gameUpdate(Game *g, const Uint8 *keystate, float dt);
 void gameCheckCollision(Game *g);
 void gameRoundReset(Game *g);
+void gameReset(Game *g);
 
 #endif // GAME_H

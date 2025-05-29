@@ -54,7 +54,10 @@ int main(int argc, char *argv[])
             if (game_state == STATE_PLAYING)
             {
                 if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    gameReset(&game);
                     game_state = STATE_MENU;
+                }
             }
         }
 

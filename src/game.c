@@ -70,3 +70,9 @@ void gameRoundReset(Game *g)
     paddleInit(&g->paddle_2, false);
     ballInit(&g->ball);
 }
+void gameReset(Game *g)
+{
+    gameRoundReset(g);
+    g->score_1 = 0;
+    g->score_2 = 0;
+}
