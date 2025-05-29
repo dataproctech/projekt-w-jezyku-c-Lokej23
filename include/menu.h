@@ -5,9 +5,19 @@
 #include <SDL2/SDL_ttf.h>   
 #include "gui.h"
 
+#define TITLE_SIZE 64
+
+typedef struct
+{
+    TTF_Font *font;
+    SDL_Color color;
+    SDL_Texture *texture;
+    SDL_Rect rect;
+} Title;
+
+
 typedef struct {
-    TTF_Font *title_font;
-    SDL_Color title_color;
+    Title title;
 
     char player1_name[16];
     char player2_name[16];
