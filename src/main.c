@@ -2,6 +2,11 @@
 
 int main(int argc, char *argv[])
 {
+    const char *res_path = "../data/results.txt";
+    LastScores rounds[10];
+    int count = readLastTenRounds(res_path, rounds);
+    bool game_played = false;
+
     Game game;
     Gui gui;
     Menu menu;
@@ -9,6 +14,8 @@ int main(int argc, char *argv[])
     strcpy(menu.player2_name, "Guest2");
     menu.paddle1_color = (SDL_Color){255, 255, 255, 255};
     menu.paddle2_color = (SDL_Color){255, 255, 255, 255};
+    memcpy(menu.last_scores, rounds, sizeof(rounds));
+    menu.last_scores_count = count;
 
     if (guiInit(&gui))
         guiClean(&gui, EXIT_FAILURE);
@@ -38,6 +45,8 @@ int main(int argc, char *argv[])
             switch (event.type)
             {
             case SDL_QUIT:
+                if (game_played)
+                    saveResultToFile(res_path, game.score_1, game.score_2);
                 guiClean(&gui, EXIT_SUCCESS);
                 game_loop = false;
                 break;
@@ -48,13 +57,22 @@ int main(int argc, char *argv[])
             if (game_state == STATE_MENU)
             {
                 if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN)
+                {
+                    game_played = true;
                     game_state = STATE_PLAYING;
+                }
             }
 
             if (game_state == STATE_PLAYING)
             {
                 if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
                 {
+                    if (game_played)
+                    {
+                        saveResultToFile(res_path, game.score_1, game.score_2);
+                        menu.last_scores_count = readLastTenRounds(res_path, menu.last_scores);
+                    }
+                    game_played = false;
                     gameReset(&game);
                     game_state = STATE_MENU;
                 }
@@ -62,7 +80,7 @@ int main(int argc, char *argv[])
         }
 
         const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-        
+
         SDL_SetRenderDrawColor(gui.renderer, 0, 0, 0, 255);
         SDL_RenderClear(gui.renderer);
         if (game_state == STATE_MENU)
@@ -72,7 +90,7 @@ int main(int argc, char *argv[])
         else
         {
             gameUpdate(&game, keystate, delta_time);
-            
+
             guiDrawCenterLine(&gui);
             if ((game.score_1 != gui.score.last_score_1 || game.score_2 != gui.score.last_score_2))
                 guiDrawScore(&gui, game.score_1, game.score_2);

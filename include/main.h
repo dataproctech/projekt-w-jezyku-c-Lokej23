@@ -3,6 +3,7 @@
 
 #include "gui.h"
 #include "menu.h"
+#include "file.h"
 #include "game.h"
 #include "paddle.h"
 #include "ball.h"
