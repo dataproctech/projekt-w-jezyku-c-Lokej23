@@ -30,8 +30,8 @@ bool guiInit(Gui *gui)
         return true;
     }
 
-    gui->score.font = TTF_OpenFont("../assets/tiny_mono_pixel.ttf", TEXT_SIZE);
-    if (!gui->score.font)
+    gui->font = TTF_OpenFont("../assets/tiny_mono_pixel.ttf", SCORE_SIZE);
+    if (!gui->font)
     {
         fprintf(stderr, "Error creating Font: %s\n", TTF_GetError());
         return true;
@@ -46,9 +46,9 @@ bool guiInit(Gui *gui)
 void guiClean(Gui *gui, int exit_status)
 {
     SDL_DestroyTexture(gui->score.texture);
+    TTF_CloseFont(gui->font);
     SDL_DestroyRenderer(gui->renderer);
     SDL_DestroyWindow(gui->window);
-    TTF_CloseFont(gui->score.font);
 
     // wychodzenie z bibliotek
     TTF_Quit();
@@ -93,7 +93,7 @@ bool guiDrawScore(Gui *gui, int score_1, int score_2)
     char score[32];
     sprintf(score, "%d  %d", score_1, score_2);
 
-    SDL_Surface *score_surface = TTF_RenderText_Blended(gui->score.font, score, gui->score.color);
+    SDL_Surface *score_surface = TTF_RenderText_Blended(gui->font, score, gui->score.color);
     if (!score_surface)
     {
         fprintf(stderr, "Error creating surface: %s\n", SDL_GetError());

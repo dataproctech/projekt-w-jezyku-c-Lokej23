@@ -2,10 +2,25 @@
 
 int main(int argc, char *argv[])
 {
+    const char *res_path = "../data/results.txt";
+    LastScores rounds[10];
+    int count = readLastTenRounds(res_path, rounds);
+    bool game_played = false;
+
     Game game;
     Gui gui;
+    Menu menu;
+    strcpy(menu.player1_name, "Guest1");
+    strcpy(menu.player2_name, "Guest2");
+    menu.paddle1_color = (SDL_Color){255, 255, 255, 255};
+    menu.paddle2_color = (SDL_Color){255, 255, 255, 255};
+    memcpy(menu.last_scores, rounds, sizeof(rounds));
+    menu.last_scores_count = count;
+
     if (guiInit(&gui))
         guiClean(&gui, EXIT_FAILURE);
+    if (menuInit(&gui, &menu))
+        menuClean(&menu);
     if (gameInit(&game, 10))
         guiClean(&gui, EXIT_FAILURE);
 
@@ -14,6 +29,7 @@ int main(int argc, char *argv[])
     double delta_time = 0.0;
     const double target_frame_time = 1.0 / 60.0; // 60 FPS
 
+    GameState game_state = STATE_MENU;
     bool game_loop = true;
     while (game_loop)
     {
@@ -29,33 +45,66 @@ int main(int argc, char *argv[])
             switch (event.type)
             {
             case SDL_QUIT:
+                if (game_played)
+                    saveResultToFile(res_path, game.score_1, game.score_2);
                 guiClean(&gui, EXIT_SUCCESS);
                 game_loop = false;
                 break;
             default:
                 break;
             }
+
+            if (game_state == STATE_MENU)
+            {
+                if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN)
+                {
+                    game_played = true;
+                    game_state = STATE_PLAYING;
+                }
+            }
+
+            if (game_state == STATE_PLAYING)
+            {
+                if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    if (game_played)
+                    {
+                        saveResultToFile(res_path, game.score_1, game.score_2);
+                        menu.last_scores_count = readLastTenRounds(res_path, menu.last_scores);
+                    }
+                    game_played = false;
+                    gameReset(&game);
+                    game_state = STATE_MENU;
+                }
+            }
         }
 
         const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-        gameUpdate(&game, keystate, delta_time);
 
         SDL_SetRenderDrawColor(gui.renderer, 0, 0, 0, 255);
         SDL_RenderClear(gui.renderer);
-        guiDrawCenterLine(&gui);
-        
-        if ((game.score_1 != gui.score.last_score_1 || game.score_2 != gui.score.last_score_2))
-            guiDrawScore(&gui, game.score_1, game.score_2);
-
-        guiDrawRect(&gui, &game.paddle_1.rect, game.paddle_1.color);
-        guiDrawRect(&gui, &game.paddle_2.rect, game.paddle_2.color);
-        guiDrawRect(&gui, &game.ball.rect, game.ball.color);
-
-        SDL_RenderPresent(gui.renderer);
-        double frame_time = (double)(SDL_GetPerformanceCounter() - now) / SDL_GetPerformanceFrequency();
-        if (frame_time < target_frame_time)
+        if (game_state == STATE_MENU)
         {
-            SDL_Delay((Uint32)((target_frame_time - frame_time) * 1000.0));
+            menuRender(&gui, &menu);
+        }
+        else
+        {
+            gameUpdate(&game, keystate, delta_time);
+
+            guiDrawCenterLine(&gui);
+            if ((game.score_1 != gui.score.last_score_1 || game.score_2 != gui.score.last_score_2))
+                guiDrawScore(&gui, game.score_1, game.score_2);
+
+            guiDrawRect(&gui, &game.paddle_1.rect, menu.paddle1_color);
+            guiDrawRect(&gui, &game.paddle_2.rect, menu.paddle2_color);
+            guiDrawRect(&gui, &game.ball.rect, game.ball.color);
+
+            double frame_time = (double)(SDL_GetPerformanceCounter() - now) / SDL_GetPerformanceFrequency();
+            if (frame_time < target_frame_time)
+            {
+                SDL_Delay((Uint32)((target_frame_time - frame_time) * 1000.0));
+            }
+            SDL_RenderPresent(gui.renderer);
         }
     }
 
